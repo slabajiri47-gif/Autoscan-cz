@@ -1,12 +1,14 @@
 import type { ReactNode } from 'react'
 
-export type View = 'dashboard' | 'scan' | 'costs' | 'garage' | 'compare' | 'database'
+export type View = 'dashboard' | 'scan' | 'import' | 'costs' | 'garage' | 'service' | 'compare' | 'database'
 
 const nav: Array<{ id: View; label: string; icon: string }> = [
   { id: 'dashboard', label: 'Přehled', icon: 'fa-chart-pie' },
   { id: 'scan', label: 'Nová analýza', icon: 'fa-wand-magic-sparkles' },
+  { id: 'import', label: 'Import', icon: 'fa-link' },
   { id: 'costs', label: 'Náklady', icon: 'fa-coins' },
   { id: 'garage', label: 'Moje garáž', icon: 'fa-warehouse' },
+  { id: 'service', label: 'Servis', icon: 'fa-screwdriver-wrench' },
   { id: 'compare', label: 'Porovnání', icon: 'fa-code-compare' },
   { id: 'database', label: 'Motory', icon: 'fa-database' },
 ]

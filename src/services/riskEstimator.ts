@@ -67,7 +67,7 @@ function genericFaults(input: EstimateInput, turbo: boolean): FaultInput[] {
   return faults
 }
 
-export function estimateEngineRisk(input: EstimateInput): Pick<Engine, 'baseScore' | 'repairReserve' | 'faults' | 'riskDataStatus' | 'riskMethod'> {
+export function estimateEngineRisk(input: EstimateInput): Pick<Engine, 'baseScore' | 'repairReserve' | 'faults' | 'riskDataStatus' | 'riskMethod' | 'purchaseRecommendation'> {
   const text = `${input.brand} ${input.code ?? ''} ${input.model}`
   const turbo = turboPattern.test(text)
   const premium = premiumPattern.test(input.brand)
@@ -94,11 +94,17 @@ export function estimateEngineRisk(input: EstimateInput): Pick<Engine, 'baseScor
   }
 
   const uniqueFaults = [...new Map(faults.map((item) => [item[0], item])).values()].slice(0, 5).map(fault)
+  const finalScore = Math.max(35, Math.min(88, score))
   return {
-    baseScore: Math.max(35, Math.min(88, score)),
+    baseScore: finalScore,
     repairReserve: Math.round(repairReserve / 1000) * 1000,
     faults: uniqueFaults,
     riskDataStatus: 'estimated',
     riskMethod: 'Modelový odhad AutoScan v1',
+    purchaseRecommendation: finalScore < 55
+      ? 'Kupovat jen po odborné diagnostice, studeném startu a kontrole servisní historie. Počítejte s vyšší rezervou.'
+      : finalScore < 72
+        ? 'Před koupí ověřte diagnostiku, úniky, stav rozvodů a funkci emisních systémů. Vyžadujte doložený servis.'
+        : 'Dobrá výchozí volba, pokud sedí historie a technický stav. Nevynechejte diagnostiku a zkušební jízdu.',
   }
 }

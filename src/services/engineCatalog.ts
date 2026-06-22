@@ -20,6 +20,7 @@ interface SupabaseEngineRow {
   base_score: number
   repair_reserve: number
   faults: EngineFault[] | null
+  purchase_recommendation: string | null
 }
 
 export interface EngineCatalogResult {
@@ -70,6 +71,7 @@ function fromRow(row: SupabaseEngineRow): Engine {
     repairReserve: Number(row.repair_reserve),
     faults: validFaults(row.faults),
     riskDataStatus: row.faults?.length ? 'verified' : 'pending',
+    purchaseRecommendation: row.purchase_recommendation ?? undefined,
   }
 }
 

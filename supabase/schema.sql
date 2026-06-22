@@ -15,6 +15,7 @@ create table if not exists public.engines (
   base_score smallint not null default 50 check (base_score between 0 and 100),
   repair_reserve integer not null default 0 check (repair_reserve >= 0),
   faults jsonb not null default '[]'::jsonb,
+  purchase_recommendation text,
   source_name text,
   source_url text,
   verified_at date,
@@ -24,6 +25,8 @@ create table if not exists public.engines (
   constraint valid_year_range check (year_from is null or year_to is null or year_from <= year_to),
   constraint faults_are_array check (jsonb_typeof(faults) = 'array')
 );
+
+alter table public.engines add column if not exists purchase_recommendation text;
 
 create index if not exists engines_brand_model_idx on public.engines (brand, model);
 create index if not exists engines_year_idx on public.engines (year_from, year_to);

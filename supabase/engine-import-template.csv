@@ -1,2 +1,2 @@
-id,code,brand,model,generation,year_from,year_to,fuel,displacement,power_kw,market,vin_prefixes,base_score,repair_reserve,faults,source_name,source_url,verified_at,active
-mercedes-om642-e350-2009,OM642,Mercedes-Benz,E 350 CDI,W212,2009,2013,nafta,2987,170,Evropa,"{WDD212}",76,30000,"[{""name"":""Těsnění olejového chladiče"",""probability"":85,""repairCost"":25000,""severity"":""vysoká""}]",interní rešerše,,2026-06-22,true
+id,code,brand,model,generation,year_from,year_to,fuel,displacement,power_kw,market,vin_prefixes,base_score,repair_reserve,faults,purchase_recommendation,source_name,source_url,verified_at,active
+mercedes-om642-e350-2009,OM642,Mercedes-Benz,E 350 CDI,W212,2009,2013,nafta,2987,170,Evropa,"{WDD212}",76,30000,"[{""name"":""Těsnění olejového chladiče"",""probability"":85,""repairCost"":25000,""severity"":""vysoká""}]","Ověřte studený start, únik oleje a diagnostiku DPF/EGR.",interní rešerše,,2026-06-22,true

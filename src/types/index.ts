@@ -1,5 +1,7 @@
 export type Severity = 'nízká' | 'střední' | 'vysoká'
-export type ServiceHistory = 'good' | 'mid' | 'bad'
+export type ServiceHistory = 'unknown' | 'good' | 'mid' | 'bad'
+export type Transmission = 'manuální' | 'automatická' | 'DSG/DCT' | 'CVT' | 'jiná'
+export type VehicleCondition = 'excellent' | 'good' | 'average' | 'poor'
 
 export interface EngineFault {
   name: string
@@ -22,6 +24,7 @@ export interface Engine {
   market?: string
   riskDataStatus?: 'verified' | 'estimated' | 'pending'
   riskMethod?: string
+  purchaseRecommendation?: string
   vinPrefixes: string[]
   baseScore: number
   repairReserve: number
@@ -35,6 +38,13 @@ export interface AnalysisInput {
   age: number
   owners: number
   history: ServiceHistory
+  year?: number
+  vehicleBrand?: string
+  vehicleModel?: string
+  transmission?: Transmission
+  askingPrice?: number
+  estimatedPrice?: number
+  condition?: VehicleCondition
   note: string
 }
 
@@ -60,7 +70,70 @@ export interface SavedCar {
   owners: number
   repairReserve: number
   note: string
+  year?: number
+  transmission?: Transmission
+  condition?: VehicleCondition
+  askingPrice?: number
+  estimatedPrice?: number
+  recommendation?: string
+  engine?: Engine
 }
+
+export interface VinDecodeResult {
+  vin: string
+  make: string
+  model: string
+  year: number
+  engineCode: string
+  transmission: Transmission
+  fuel?: Engine['fuel']
+  matchedEngine?: Engine
+  source: 'mock' | 'api'
+}
+
+export interface PriceEstimate {
+  fairPrice: number
+  minPrice: number
+  maxPrice: number
+  verdict?: 'low' | 'fair' | 'high'
+  confidence: 'low' | 'medium'
+  explanation: string
+}
+
+export interface ListingCandidate {
+  id: string
+  source: 'Sauto' | 'TipCars' | 'Bazoš' | 'Marketplace'
+  sourceUrl: string
+  title: string
+  brand: string
+  model: string
+  year: number
+  mileage: number
+  engineCode: string
+  transmission: Transmission
+  askingPrice: number
+  condition: VehicleCondition
+  vin?: string
+}
+
+export interface ServicePlanItem {
+  id: string
+  title: string
+  description: string
+  dueKm: number
+  dueDate: string
+  priority: 'low' | 'medium' | 'high'
+}
+
+export interface ServiceReminder extends ServicePlanItem {
+  vehicleId: string
+  createdAt: string
+  completed: boolean
+  notificationStatus: 'local-only' | 'scheduled' | 'sent'
+}
+
+export interface AppUser { id: string; email: string; displayName?: string; createdAt: string }
+export interface StoredReport { id: string; vehicleId: string; createdAt: string; score: number }
 
 export interface CostInputs {
   yearlyKm: number

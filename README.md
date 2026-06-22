@@ -38,23 +38,28 @@ vercel
 vercel --prod
 ```
 
-## Funkce
+## Funkce verze 1.1
 
-- VIN demo rozpoznání a ruční výběr motoru
+- VIN dekodér se servisní vrstvou, mock fallbackem a předvyplněním vozidla
 - risk score se zachovanou logikou původního prototypu
-- škálovatelný katalog motorů ze Supabase s offline cache a lokálním fallbackem
+- 166 motorových rodin, závady, ceny oprav a doporučení před koupí
 - filtrování podle značky, modelu, roku výroby, paliva a fulltextu
+- mock import kandidáta ze Sauto, TipCars, Bazoše a Marketplace
+- interní odhad ceny ojetiny s verdiktem nízká / férová / vysoká
+- servisní plán podle motoru a nájezdu s lokálními připomínkami
 - předkupní checklist
 - kalkulačka a grafy provozních nákladů
-- LocalStorage garáž včetně načtení starého klíče `autoscanCars`
+- LocalStorage garáž s detailem, editací a mazáním, připravená na účet
 - porovnání uložených vozů
-- přímý export analýzy do PDF
-- rozhraní pro budoucí Supabase backend a VIN API
+- profesionální PDF report s identitou AutoScan CZ
+- bezpečné mock vrstvy Supabase pro users, vehicles, reports a reminders
+
+Mock VIN databáze obsahuje testovací VINy `WDD2120251A043863`, `TMBJG7NE8J0123456` a `WBA3D31070F123456`. Bez API klíče se automaticky používá mock klient.
 
 ## Katalog motorů v Supabase
 
 1. Vytvořte projekt na Supabase.
-2. V jeho **SQL Editoru** spusťte `supabase/schema.sql`.
+2. V jeho **SQL Editoru** spusťte `supabase/schema.sql` a volitelně `supabase/app-schema.sql`.
 3. V **Table Editor → engines → Import data from CSV** nahrajte data ve formátu `supabase/engine-import-template.csv`.
 4. Zkopírujte `.env.example` do `.env.local` a vyplňte `VITE_SUPABASE_URL` a `VITE_SUPABASE_ANON_KEY`.
 5. Spusťte znovu `npm run dev` nebo vytvořte nový produkční build.
@@ -67,6 +72,6 @@ Vestavěný rozšířený katalog používá pro dosud ručně neověřené polo
 
 ## Budoucí integrace
 
-Proměnné prostředí jsou zdokumentované v `.env.example`. Rozhraní `CarBackend` v `src/services/backend.ts` odděluje data garáže od UI. `VinApiClient` v `src/services/vinApi.ts` lze nahradit konkrétním poskytovatelem bez změny analytické logiky.
+Proměnné prostředí jsou zdokumentované v `.env.example`. Rozhraní `VehicleRepository` v `src/services/storage.ts` odděluje garáž od úložiště. VIN klient i Supabase klient mají bezpečný lokální fallback a bez konfigurace nesmí shodit aplikaci.
 
 > Výsledky jsou orientační a nenahrazují fyzickou prohlídku ani profesionální diagnostiku vozu.

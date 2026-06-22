@@ -165,6 +165,10 @@ function slug(value: string) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
+function inferFuel(code: string): Fuel {
+  return /OM\d|TDI|dCi|HDi|TDCi|M57|N47|B47|CDI/i.test(code) ? 'nafta' : 'benzín'
+}
+
 const verifiedCodes = new Set(verifiedEngines.map((engine) => engine.id.toLocaleLowerCase('cs')))
 
 const broadCatalog: Engine[] = entries
@@ -181,6 +185,6 @@ const broadCatalog: Engine[] = entries
   })
 
 export const offlineCatalog: Engine[] = [
-  ...verifiedEngines.map((engine) => ({ ...engine, code: engine.id, riskDataStatus: 'verified' as const, riskMethod: 'Ručně sestavený profil' })),
+  ...verifiedEngines.map((engine) => ({ ...engine, code: engine.id, fuel: engine.fuel ?? inferFuel(engine.id), riskDataStatus: 'verified' as const, riskMethod: 'Ručně sestavený profil', purchaseRecommendation: engine.baseScore < 60 ? 'Kupovat pouze po důkladné diagnostice a s vyšší rezervou na první rok.' : 'Ověřte servisní historii, studený start a nejdražší typické závady před podpisem smlouvy.' })),
   ...broadCatalog,
 ]
