@@ -1,0 +1,9 @@
+import type { SavedCar } from '../types'
+import { money, number, shortDate } from '../utils/format'
+import { RiskBadge } from '../components/RiskBadge'
+
+export function Garage({ cars, onDelete, onClear }: { cars: SavedCar[]; onDelete: (id: string) => void; onClear: () => void }) {
+  return <section className="panel garage-panel"><div className="panel-head"><div><span className="eyebrow">LOKÁLNÍ ÚLOŽIŠTĚ</span><h2>Uložená vozidla</h2><p>{cars.length} {cars.length === 1 ? 'vůz' : cars.length > 1 && cars.length < 5 ? 'vozy' : 'vozidel'} v garáži</p></div>{cars.length > 0 && <button className="danger-button" onClick={() => { if (confirm('Opravdu smazat všechna uložená auta?')) onClear() }}><i className="fa-solid fa-trash" /> Smazat vše</button>}</div>
+    {cars.length ? <div className="garage-grid">{cars.map((car) => <article className="garage-card" key={car.id}><div className="garage-card-top"><span className="car-icon large"><i className="fa-solid fa-car-side" /></span><RiskBadge score={car.score} /><button aria-label="Smazat vůz" onClick={() => onDelete(car.id)}><i className="fa-solid fa-ellipsis-vertical" /></button></div><h3>{car.brand}</h3><p>{car.model}</p><div className="garage-score"><strong>{car.score}</strong><span>/100<br />AUTOSCAN SKÓRE</span></div><dl><div><dt>Motor</dt><dd>{car.engineId}</dd></div><div><dt>Nájezd</dt><dd>{number(car.mileage)} km</dd></div><div><dt>Rezerva</dt><dd>{money(car.repairReserve)}</dd></div><div><dt>Uloženo</dt><dd>{shortDate(car.createdAt)}</dd></div></dl><button className="delete-link" onClick={() => onDelete(car.id)}><i className="fa-solid fa-trash" /> Odstranit z garáže</button></article>)}</div> : <div className="empty-state"><span><i className="fa-solid fa-warehouse" /></span><h3>Garáž je zatím prázdná</h3><p>Po analýze si vůz uložte. Zůstane dostupný i po zavření prohlížeče.</p></div>}
+  </section>
+}

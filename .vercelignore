@@ -1,0 +1,6 @@
+dist
+standalone-dist
+AutoScanCZ_aplikace.html
+node_modules
+.env*
+!.env.example
