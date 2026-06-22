@@ -40,11 +40,11 @@ vercel --prod
 
 ## Funkce verze 1.1
 
-- VIN dekodér se servisní vrstvou, mock fallbackem a předvyplněním vozidla
+- automatický VIN dekodér se servisní vrstvou, mock fallbackem a předvyplněním technických i dostupných historických údajů
 - risk score se zachovanou logikou původního prototypu
 - 166 motorových rodin, závady, ceny oprav a doporučení před koupí
 - filtrování podle značky, modelu, roku výroby, paliva a fulltextu
-- mock import kandidáta ze Sauto, TipCars, Bazoše a Marketplace
+- bezpečný import odkazů ze Sauto, TipCars, Bazoše a Marketplace; bez parser API používá ruční doplnění a nevymýšlí vozidlo
 - interní odhad ceny ojetiny s verdiktem nízká / férová / vysoká
 - servisní plán podle motoru a nájezdu s lokálními připomínkami
 - předkupní checklist
@@ -55,6 +55,12 @@ vercel --prod
 - bezpečné mock vrstvy Supabase pro users, vehicles, reports a reminders
 
 Mock VIN databáze obsahuje testovací VINy `WDD2120251A043863`, `TMBJG7NE8J0123456` a `WBA3D31070F123456`. Bez API klíče se automaticky používá mock klient.
+
+Import skutečných inzerátů vyžaduje serverový parser nastavený pomocí `VITE_LISTING_PARSER_URL`. Bez něj aplikace pouze rozpozná zdroj odkazu a nabídne ruční přepis údajů. Vestavěná demo vozidla nejsou používána.
+
+Při nasazení na Vercel se automaticky použije vestavěná funkce `api/parse-listing.ts`. Parser čte JSON-LD, Open Graph a textová metadata pouze z povolených domén. Marketplace může vyžadovat přihlášení nebo blokovat automatické načtení; v takovém případě aplikace zobrazí chybu a nabídne ruční postup. Jednosouborová `file://` verze používá ruční import, pokud jí přes `VITE_LISTING_PARSER_URL` nenastavíte veřejnou adresu nasazeného parseru.
+
+Pro skutečný import v jednosouborové verzi spusťte v samostatném terminálu `npm run parser`. Offline aplikace automaticky použije lokální endpoint `http://127.0.0.1:8787/api/parse-listing`; pokud neběží, vrátí se k ručnímu importu.
 
 ## Katalog motorů v Supabase
 

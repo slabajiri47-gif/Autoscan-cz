@@ -87,6 +87,9 @@ export interface VinDecodeResult {
   engineCode: string
   transmission: Transmission
   fuel?: Engine['fuel']
+  mileage?: number
+  owners?: number
+  serviceHistory?: ServiceHistory
   matchedEngine?: Engine
   source: 'mock' | 'api'
 }
@@ -114,6 +117,8 @@ export interface ListingCandidate {
   askingPrice: number
   condition: VehicleCondition
   vin?: string
+  parserWarnings?: string[]
+  parserSource?: 'json-ld' | 'metadata'
 }
 
 export interface ServicePlanItem {

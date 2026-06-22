@@ -7,12 +7,15 @@ interface MockVinRecord {
   engineCode: string
   transmission: Transmission
   fuel: Engine['fuel']
+  mileage?: number
+  owners?: number
+  serviceHistory?: VinDecodeResult['serviceHistory']
 }
 
 const mockVins: Record<string, MockVinRecord> = {
-  WDD2120251A043863: { make: 'Mercedes-Benz', model: 'E 350 CDI', year: 2011, engineCode: 'OM642', transmission: 'automatická', fuel: 'nafta' },
-  TMBJG7NE8J0123456: { make: 'Škoda', model: 'Octavia III', year: 2018, engineCode: '2.0 TDI CR', transmission: 'DSG/DCT', fuel: 'nafta' },
-  WBA3D31070F123456: { make: 'BMW', model: '320d', year: 2015, engineCode: 'B47', transmission: 'automatická', fuel: 'nafta' },
+  WDD2120251A043863: { make: 'Mercedes-Benz', model: 'E 350 CDI', year: 2011, engineCode: 'OM642', transmission: 'automatická', fuel: 'nafta', mileage: 218500, owners: 3, serviceHistory: 'mid' },
+  TMBJG7NE8J0123456: { make: 'Škoda', model: 'Octavia III', year: 2018, engineCode: '2.0 TDI CR', transmission: 'DSG/DCT', fuel: 'nafta', mileage: 168000, owners: 2, serviceHistory: 'good' },
+  WBA3D31070F123456: { make: 'BMW', model: '320d', year: 2015, engineCode: 'B47', transmission: 'automatická', fuel: 'nafta', mileage: 192000, owners: 3, serviceHistory: 'mid' },
 }
 
 export interface VinApiClient {
@@ -52,7 +55,7 @@ class HttpVinApiClient implements VinApiClient {
     })
     if (!response.ok) throw new Error(`VIN API vrátilo chybu ${response.status}.`)
     const data = await response.json() as Omit<VinDecodeResult, 'vin' | 'source' | 'matchedEngine'>
-    const mockRecord: MockVinRecord = { make: data.make, model: data.model, year: data.year, engineCode: data.engineCode, transmission: data.transmission, fuel: data.fuel }
+    const mockRecord: MockVinRecord = { make: data.make, model: data.model, year: data.year, engineCode: data.engineCode, transmission: data.transmission, fuel: data.fuel, mileage: data.mileage, owners: data.owners, serviceHistory: data.serviceHistory }
     return { ...data, vin, source: 'api', matchedEngine: matchEngine(this.engines, mockRecord) }
   }
 }

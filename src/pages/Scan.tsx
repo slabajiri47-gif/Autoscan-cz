@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { checklistItems } from '../data/engines'
 import { analyzeCar } from '../services/analysis'
 import { exportAnalysisPdf } from '../services/pdf'
@@ -29,7 +29,7 @@ export function Scan({ engines, draft, onDraftConsumed, onSave }: Props) {
   const update = <K extends keyof AnalysisInput>(key: K, value: AnalysisInput[K]) => setForm((current) => ({ ...current, [key]: value }))
   const analyze = () => { if (!selected || !form.mileage) { setNotice('Vyberte motor a zadejte nájezd.'); return null } const next = analyzeCar({ ...form, estimatedPrice: priceEstimate?.fairPrice }, engines); setResult(next); setNotice(''); return next }
   const save = async () => { const current = result ?? analyze(); if (!current) return; setSaving(true); await onSave(current); setSaving(false); setNotice('Vůz byl uložen do garáže.') }
-  const applyVin = (decoded: VinDecodeResult) => setForm((current) => ({ ...current, vin: decoded.vin, engineId: decoded.matchedEngine?.id ?? current.engineId, vehicleBrand: decoded.make, vehicleModel: decoded.model, year: decoded.year, age: Math.max(0, new Date().getFullYear() - decoded.year), transmission: decoded.transmission }))
+  const applyVin = useCallback((decoded: VinDecodeResult) => setForm((current) => ({ ...current, vin: decoded.vin, engineId: decoded.matchedEngine?.id ?? current.engineId, vehicleBrand: decoded.make, vehicleModel: decoded.model, year: decoded.year, age: Math.max(0, new Date().getFullYear() - decoded.year), transmission: decoded.transmission, mileage: decoded.mileage ?? current.mileage, owners: decoded.owners ?? current.owners, history: decoded.serviceHistory ?? current.history })), [])
   const priceEstimate = useMemo(() => form.vehicleBrand && form.vehicleModel && form.year && form.condition ? estimateUsedCarPrice({ brand: form.vehicleBrand, model: form.vehicleModel, year: form.year, mileage: form.mileage, engineCode: selected?.code ?? selected?.id ?? '', condition: form.condition, askingPrice: form.askingPrice }) : null, [form.vehicleBrand, form.vehicleModel, form.year, form.condition, form.mileage, form.askingPrice, selected])
   const done = checks.filter(Boolean).length
 

@@ -11,6 +11,7 @@
     "build": "tsc -b && vite build",
     "build:standalone": "tsc -b && vite build --mode standalone --outDir standalone-dist",
     "preview": "vite preview",
+    "parser": "node scripts/parser-server.mjs",
     "lint": "eslint ."
   },
   "dependencies": {
